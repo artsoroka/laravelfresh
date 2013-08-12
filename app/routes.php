@@ -17,10 +17,11 @@ Route::get('/', function()
 });
 
 
-Route::get('/catalog', function(){
-	//return Item::all(); 
-
-	return View::make('catalog'); 
+Route::get('/catalog/{category_id}', function($category_id){
+	$items =  Item::where('category_id', '=', $category_id)->orderBy('id')->get(); 
+	
+	//return View::make('catalog'); 
+	return $items; 
 }); 
 
 
