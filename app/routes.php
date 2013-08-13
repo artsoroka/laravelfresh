@@ -29,7 +29,6 @@ Route::get('/catalog/{item_id}', function($item_id){
 	$item = Item::find($item_id); 
 
 	return View::make('sitepages.item', array('item' => $item)); 
-
 	
 }); 
 
