@@ -18,6 +18,7 @@ class CreateUsersTable extends Migration {
 			$table->string('email');
 			$table->string('password');
 			$table->string('status'); 
+			$table->string('role'); 
 			$table->string('confirmation'); 
 			$table->timestamps();
 		});
@@ -32,5 +33,11 @@ class CreateUsersTable extends Migration {
 	{
 		Schema::drop('users');
 	}
+
+	public function companies()
+    {
+        return $this->hasMany('Company');
+    }
+
 
 }

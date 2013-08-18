@@ -41,6 +41,12 @@ Route::filter('auth', function()
 });
 
 
+Route::filter('admin', function()
+{	
+	if( Auth::user()->role != 'manager' ) return "users are not allowed here"; 
+});
+
+
 Route::filter('auth.basic', function()
 {
 	return Auth::basic();
@@ -86,4 +92,3 @@ Route::filter('csrf', function()
 Route::filter('cookiemaster', function($route, $request, $response){
 	$response->withCookie(Cookie::make('thecookie', 'the kookie', 10)); 
 });
-

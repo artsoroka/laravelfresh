@@ -11,8 +11,8 @@ class UsersTableSeeder extends Seeder {
 	{
 		$users = array(
 
-				array('email' => 'someuser@gmail.com', 'password' => Hash::make('qwerty'), 'status' => 'active'),
-				array('email' => 'manager@company.com', 'password' => Hash::make('qwerty'), 'status' => 'active')
+				array('email' => 'someuser@gmail.com', 'password' => Hash::make('qwerty'), 'status' => 'active', 'role' => 'user'),
+				array('email' => 'manager@company.com', 'password' => Hash::make('qwerty'), 'status' => 'active', 'role' => 'manager')
 		);  
 
 		

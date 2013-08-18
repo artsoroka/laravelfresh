@@ -15,7 +15,6 @@ Route::get('/', function(){
 
 	$items = Item::all(); 
 
-
 	return View::make('sitepages.mainpage', array('items' => $items)); 
 
 }); 
@@ -52,6 +51,10 @@ Route::get('/getcookie', function(){
 	return Cookie::get('thecookie');
 });
 
+Route::get('/user/{user_id}', function($user_id){
+	return User::find($user_id); 
+
+}); 
 
 
 Route::get('/category/{category}', function($category_id)
@@ -113,16 +116,65 @@ Route::post('/login', function(){
 		);
 
 	if(Auth::attempt($credentials)){
-		return Redirect::to('admin');  
+		
+		if(Auth::user()->role == 'manager'){
+			return Redirect::to('admin');  	
+		} else {
+			return Redirect::to('home'); 
+		}
+		
 	} else {
 		return View::make('login', array('error' => true)); 
 	} 
 });
 
 
+Route::get('/home', function(){
+	$user = Auth::user();
+	return View::make('userpages.index'); 
+}); 
+
+Route::get('/home/company', function(){
+	$user = Auth::user(); 
+
+	$companies = Company::where('user_id', '=', $user->id)->get(); 
+
+	return View::make('userpages.companies', array('companies' => $companies)); 
+
+}); 
+
+
+Route::get('/home/company/new', function(){
+	
+	$user = Auth::user(); 
+
+	return View::make('userpages.new_company'); 
+
+}); 
+
+
+Route::post('/home/company/new', function(){
+	
+	$user = Auth::user(); 
+	$file = Input::file('file'); 
+	$filename = uniqid(); 
+	$name = Input::file('file')->getClientOriginalName();
+
+	$extention = explode(".", $name); 
+
+	$extention = array_pop($extention);  
+
+
+	$filename .= "." . $extention;
+
+	$file->move('public/img/upload', $filename); 
+	return Input::get('filename'); 
+}); 
 
 
 
-Route::get('/admin', array('before'=>'auth', function(){
+Route::get('/admin', array('before'=>'auth|admin', function(){
+
 	return View::make('adminpages.index', array('items' => Item::all())); 
+
 })); 
