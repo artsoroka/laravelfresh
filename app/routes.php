@@ -15,6 +15,7 @@ Route::get('/', function(){
 
 	$items = Item::all(); 
 
+<<<<<<< HEAD
 	return View::make('sitepages.mainpage', array('items' => $items)); 
 
 }); 
@@ -29,6 +30,13 @@ Route::get('/catalog/{item_id}', function($item_id){
 	} else {
 		return "Item not found"; 
 	}
+=======
+Route::get('/catalog/{category_id}', function($category_id){
+	$items =  Item::where('category_id', '=', $category_id)->orderBy('id')->get(); 
+	
+	//return View::make('catalog'); 
+	return $items; 
+>>>>>>> ada9b29c318bac5334e61235952d75b2f9c65b0b
 }); 
 
 
@@ -80,6 +88,7 @@ Route::get('/{category}/product/{product_id}', function($category, $product_id)
 {
 	return $category . " : " . $product_id ; 
 });
+<<<<<<< HEAD
 
 
 Route::get('/login', function(){
@@ -115,3 +124,5 @@ Route::get('/admin', array('before'=>'auth', function(){
 	return View::make('adminpages.index', array('items' => Item::all())); 
 }));
 
+=======
+>>>>>>> ada9b29c318bac5334e61235952d75b2f9c65b0b
