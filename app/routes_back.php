@@ -20,6 +20,7 @@ Route::get('/', function(){
 
 }); 
 
+
 Route::get('/catalog/{item_id}', function($item_id){
 
 	$item = Item::find($item_id); 
@@ -29,7 +30,6 @@ Route::get('/catalog/{item_id}', function($item_id){
 	} else {
 		return "Item not found"; 
 	}
-}); 
 
 Route::get('/catalog/{category_id}', function($category_id){
 	$items =  Item::where('category_id', '=', $category_id)->orderBy('id')->get(); 
@@ -76,10 +76,7 @@ Route::get('/item/{item_id}/edit', function($item_id){
 }); 
 
 Route::get('/item/{item_id}/delete', function($item_id){
-	$item = Item::find($item_id); 
-	if($item) $item->delete(); 
-
-	return "item deleted"; 
+	return  Item::find($item_id);
 });
 
 Route::get('/item/{item_id}', function($item_id){
