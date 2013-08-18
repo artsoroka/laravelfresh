@@ -1,5 +1,10 @@
 @extends('userpages.template')
 
+@section('page_name')
+Мои компании
+@endsection 
+
+
 @section('content')
 
 @if( count($companies) > 0 )
@@ -19,8 +24,8 @@
     	<td><input type="checkbox" name="{{ $company->id }}" /></td>
     	<td>{{ $company->id }}</td>
     	<td>{{ $company->title }}</td>
-    	<td><a class="btn btn-small btn-success" href="/admin/company/{{ $company->id }}/edit"><i class="icon-pencil"></i> Редактировать </a>
-    	 <a class="btn btn-small btn-danger" href="/admin/company/{{ $company->id }}/delete"><i class="icon-trash"></i> Удалить</a> </td>
+    	<td><a class="btn btn-small btn-success" href="/home/company/{{ $company->id }}/edit"><i class="icon-pencil"></i> Редактировать </a>
+    	 <a class="btn btn-small btn-danger remove_item" href="/home/company/{{ $company->id }}/delete"><i class="icon-trash"></i> Удалить</a> </td>
 	</tr>
 
 	@endforeach 

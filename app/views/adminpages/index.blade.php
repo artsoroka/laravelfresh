@@ -1,5 +1,10 @@
 @extends('adminpages.template')
 
+@section('page_name')
+Личный кабинет
+@endsection 
+
+
 @section('content')
 
 

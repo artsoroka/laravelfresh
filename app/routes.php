@@ -96,6 +96,15 @@ Route::get('/{category}/product/{product_id}', function($category, $product_id)
 });
 
 
+/*
+|--------------------------------------------------------------------------
+| Login / Logout  
+|--------------------------------------------------------------------------
+|
+| Authentication is based on Laravel's Eloquent auth driver 
+| using Users table 
+|
+*/
 
 Route::get('/login', function(){
 	return View::make('login', array('error' => false)); 
@@ -129,46 +138,106 @@ Route::post('/login', function(){
 });
 
 
-Route::get('/home', function(){
-	$user = Auth::user();
-	return View::make('userpages.index'); 
-}); 
+/*
+|--------------------------------------------------------------------------
+| Home 
+|--------------------------------------------------------------------------
+|
+| Home directory is for authenticated users
+|
+*/
 
-Route::get('/home/company', function(){
-	$user = Auth::user(); 
-
-	$companies = Company::where('user_id', '=', $user->id)->get(); 
-
-	return View::make('userpages.companies', array('companies' => $companies)); 
-
-}); 
+Route::group(array('before' => 'auth'), function(){
 
 
-Route::get('/home/company/new', function(){
-	
-	$user = Auth::user(); 
+	Route::get('/home', function(){
+		$user = Auth::user();
+		return View::make('userpages.index'); 
+	}); 
 
-	return View::make('userpages.new_company'); 
+	Route::get('/home/company', function(){
+		$user = Auth::user(); 
 
-}); 
+		$companies = Company::where('user_id', '=', $user->id)->get(); 
+
+		return View::make('userpages.companies', array('companies' => $companies)); 
+
+	}); 
+
+	Route::get('/home/company/new', function(){
+		
+		$user = Auth::user(); 
+
+		return View::make('userpages.new_company'); 
+
+	}); 
 
 
-Route::post('/home/company/new', function(){
-	
-	$user = Auth::user(); 
-	$file = Input::file('file'); 
-	$filename = uniqid(); 
-	$name = Input::file('file')->getClientOriginalName();
+	Route::post('/home/company/new', function(){
+		/*
+			
+		$user = Auth::user(); 
+		$file = Input::file('file'); 
+		$filename = uniqid(); 
+		$name = Input::file('file')->getClientOriginalName();
 
-	$extention = explode(".", $name); 
+		$extention = explode(".", $name); 
 
-	$extention = array_pop($extention);  
+		$extention = array_pop($extention);  
 
 
-	$filename .= "." . $extention;
+		$filename .= "." . $extention;
 
-	$file->move('public/img/upload', $filename); 
-	return Input::get('filename'); 
+		$file->move('public/img/upload', $filename); 
+		return Input::get('filename'); 
+		*/
+		
+		$user = Auth::user(); 
+
+		$company_title 			= Input::get('company_title'); 	
+		$company_description	= Input::get('company_description'); 
+
+
+		$validation = Validator::make(
+	    	array('title' => $company_title),
+	    	array('title' => array('required', 'unique:companies'))
+		);
+
+		if($validation->fails()){
+			return $validation->errors();
+		} else {
+			
+			$company = new Company;
+
+			$company->title 		= $company_title; 
+			$company->description 	= $company_description;
+			$company->user_id		= $user->id; 
+
+			$company->save(); 
+
+			return Redirect::to('/home/company'); 
+
+		}
+
+	}); 
+
+	Route::get('/home/company/{company_id}/delete', function($company_id){
+		$user 	 = Auth::user();  
+		$company = Company::find($company_id); 
+
+		if( ! $company ) return "company not found"; 
+
+		//if( $company->user_id != $user->id ) return "can't touch this"; 
+		if($company->belongs_to($user)){
+			$company->delete(); 
+			return Redirect::to('/home/company'); 
+		} else{
+			return "can't touch this"; 
+		}
+
+	});
+
+
 }); 
 
 
