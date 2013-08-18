@@ -35,11 +35,11 @@ FRESH IDEAS
 		<img src="/img/12.png" width="400" height="auto"/>
 		</div>
 		<div class="i_name">
-		Название сертификата
+		{{ $item->title }}
 		</div>
 		<div class="i_info">
 		Сертификат на покупку<br>
-		Цена: <span class="red"> 5000 руб.</span><br>
+		Цена: <span class="red"> {{ $item->price }} руб.</span><br>
 		<div class="icons">
 		<img src="/img/new.png" width="50" height="auto"/>
 		<img src="/img/sale.png" width="50" height="auto"/>
@@ -48,11 +48,7 @@ FRESH IDEAS
 		</div>
 		<div class="i_desc">
 		Описание сертификата<br>
-		Наш подарок — это элегантная коробочка, куда вкладывается описание выбранного Вами подарка и ваучер (подарочный сертификат) с индивидуальным номером на удивительное приключение, действительный в течение года.
-
-		Как это выглядит
-
-		В каждой упаковке обладатель подарка найдет подробное описание приключения и ваучер с индивидуальным номером для его активации.
+		{{ $item->description }}
 		</div>
 		<div class="buy">
 		<a href="">Купить</a>

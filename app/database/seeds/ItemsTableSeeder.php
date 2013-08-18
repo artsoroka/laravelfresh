@@ -12,7 +12,10 @@ class ItemsTableSeeder extends Seeder {
 		$items = array(
 
 				array('category_id' => '1', 'company_id' => 1, 'title' => 'Muffins', 'description' => 'Fresh and tasty', 
-					'start_date' => time(), 'end_date' => time() + 30 * 24, 'price' => 100)
+					'start_date' => time(), 'end_date' => time() + 30 * 24, 'price' => 100),
+
+				array('category_id' => '1', 'company_id' => 1, 'title' => 'Rafaello', 'description' => 'Sweet sixteen', 
+					'start_date' => time(), 'end_date' => time() + 30 * 24, 'price' => 250)
 		);  
 
 		

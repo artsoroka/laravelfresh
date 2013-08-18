@@ -29,90 +29,22 @@ FRESH IDEAS
 
 
 @section('content')
-<a href="catalog/1">
-<div class="items">
-<div class="item_name">
-<h3>Название товара</h3>
-</div>
-<div class="item_img">
-<img src="/img/12.png" width="170px" height="auto"/>
-</div>
-<div class="item_desc">
-Бкутишутиутиутилкиту
-</div>
-</div>
-</a>
+	@foreach ($items as $item)
 
-<a href="catalog/2">
-<div class="items">
-<div class="item_name">
-<h3>Название товара</h3>
-</div>
-<div class="item_img">
-<img src="/img/12.png" width="170px" height="auto"/>
-</div>
-<div class="item_desc">
-Бкутишутиутиутилкиту
-</div>
-</div>
-</a>
+		<a href="catalog/{{ $item->id }}">
+		<div class="items">
+		<div class="item_name">
+		<h3>{{ $item->title }}</h3>
+		</div>
+		<div class="item_img">
+		<img src="/img/12.png" width="170px" height="auto"/>
+		</div>
+		<div class="item_desc">
+		{{ $item->description }}
+		</div>
+		</div>
+		</a>
 
+	@endforeach
 
-<a href="catalog/3">
-<div class="items">
-<div class="item_name">
-<h3>Название товара</h3>
-</div>
-<div class="item_img">
-<img src="/img/12.png" width="170px" height="auto"/>
-</div>
-<div class="item_desc">
-Бкутишутиутиутилкиту
-</div>
-</div>
-</a>
-
-
-<a href="catalog/4">
-<div class="items">
-<div class="item_name">
-<h3>Название товара</h3>
-</div>
-<div class="item_img">
-<img src="/img/12.png" width="170px" height="auto"/>
-</div>
-<div class="item_desc">
-Бкутишутиутиутилкиту
-</div>
-</div>
-</a>
-
-
-<a href="catalog/5">
-<div class="items">
-<div class="item_name">
-<h3>Название товара</h3>
-</div>
-<div class="item_img">
-<img src="/img/12.png" width="170px" height="auto"/>
-</div>
-<div class="item_desc">
-Бкутишутиутиутилкиту
-</div>
-</div>
-</a>
-
-<a href="catalog/1">
-<div class="items">
-<div class="item_name">
-<h3>Название товара</h3>
-</div>
-<div class="item_img">
-<img src="/img/12.png" width="170px" height="auto"/>
-</div>
-<div class="item_desc">
-Бкутишутиутиутилкиту
-</div>
-</div>
-</a>
 @endsection

@@ -11,15 +11,11 @@
 |
 */
 
-Route::get('/', function()
-{
-	return View::make('hello');
-});
+Route::get('/', function(){
 
+	$items = Item::all(); 
 
-Route::get('/catalog', function(){
-
-	return View::make('sitepages.mainpage'); 
+	return View::make('sitepages.mainpage', array('items' => $items)); 
 
 }); 
 
@@ -28,9 +24,11 @@ Route::get('/catalog/{item_id}', function($item_id){
 
 	$item = Item::find($item_id); 
 
-	return View::make('sitepages.item', array('item' => $item)); 
-
-	
+	if($item) {
+		return View::make('sitepages.item', array('item' => $item)); 
+	} else {
+		return "Item not found"; 
+	}
 }); 
 
 
@@ -48,7 +46,7 @@ Route::get('/getcookie', function(){
 
 
 
-Route::get('/{category}', function($category_id)
+Route::get('/category/{category}', function($category_id)
 {
 	
 	$items = Item::where('category_id', '=', $category_id)->get();
@@ -60,7 +58,60 @@ Route::get('/{category}', function($category_id)
 
 });
 
+Route::get('/item/{item_id}/edit', function($item_id){
+	$item = Item::find($item_id); 
+	if($item){
+		$title = Input::has('update_title') ? Input::get('update_title') : $item->title; 
+		$item->title = $title; 
+		$item->save();
+	}
+}); 
+
+Route::get('/item/{item_id}/delete', function($item_id){
+	return  Item::find($item_id);
+});
+
+Route::get('/item/{item_id}', function($item_id){
+	$item = Item::find($item_id); 
+	return $item; 
+});
+
 Route::get('/{category}/product/{product_id}', function($category, $product_id)
 {
 	return $category . " : " . $product_id ; 
 });
+
+
+Route::get('/login', function(){
+	return View::make('login', array('error' => false)); 
+});
+
+Route::get('/logout', function() {
+    Auth::logout();
+    return Redirect::to('login');
+});
+
+
+Route::post('/login', function(){
+		
+	$credentials = array(
+			'status' => 'active',
+			'email' => Input::get('email'),
+			'password' => Input::get('password')
+		);
+
+	if(Auth::attempt($credentials)){
+		return Redirect::to('admin');  
+	} else {
+		return View::make('login', array('error' => true)); 
+	} 
+});
+
+
+
+
+
+Route::get('/admin', array('before'=>'auth', function(){
+	return View::make('adminpages.index', array('items' => Item::all())); 
+}));
+
