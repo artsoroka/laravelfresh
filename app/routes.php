@@ -58,6 +58,24 @@ Route::get('/category/{category}', function($category_id)
 
 });
 
+Route::get('/item/{item_id}/edit', function($item_id){
+	$item = Item::find($item_id); 
+	if($item){
+		$title = Input::has('update_title') ? Input::get('update_title') : $item->title; 
+		$item->title = $title; 
+		$item->save();
+	}
+}); 
+
+Route::get('/item/{item_id}/delete', function($item_id){
+	return  Item::find($item_id);
+});
+
+Route::get('/item/{item_id}', function($item_id){
+	$item = Item::find($item_id); 
+	return $item; 
+});
+
 Route::get('/{category}/product/{product_id}', function($category, $product_id)
 {
 	return $category . " : " . $product_id ; 
