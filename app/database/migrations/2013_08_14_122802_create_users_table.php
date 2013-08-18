@@ -34,4 +34,10 @@ class CreateUsersTable extends Migration {
 		Schema::drop('users');
 	}
 
+	public function companies()
+    {
+        return $this->hasMany('Company');
+    }
+
+
 }

@@ -15,7 +15,6 @@ Route::get('/', function(){
 
 	$items = Item::all(); 
 
-
 	return View::make('sitepages.mainpage', array('items' => $items)); 
 
 }); 
@@ -52,6 +51,10 @@ Route::get('/getcookie', function(){
 	return Cookie::get('thecookie');
 });
 
+Route::get('/user/{user_id}', function($user_id){
+	return User::find($user_id); 
+
+}); 
 
 
 Route::get('/category/{category}', function($category_id)
@@ -113,16 +116,27 @@ Route::post('/login', function(){
 		);
 
 	if(Auth::attempt($credentials)){
-		return Redirect::to('admin');  
+		
+		if(Auth::user()->role == 'manager'){
+			return Redirect::to('admin');  	
+		} else {
+			return Redirect::to('home'); 
+		}
+		
 	} else {
 		return View::make('login', array('error' => true)); 
 	} 
 });
 
 
+Route::get('/home', function(){
+	$user = Auth::user();
+	return View::make('userpages.index'); 
+}); 
 
 
+Route::get('/admin', array('before'=>'auth|admin', function(){
 
-Route::get('/admin', array('before'=>'auth', function(){
 	return View::make('adminpages.index', array('items' => Item::all())); 
+
 })); 
