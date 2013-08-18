@@ -134,6 +134,44 @@ Route::get('/home', function(){
 	return View::make('userpages.index'); 
 }); 
 
+Route::get('/home/company', function(){
+	$user = Auth::user(); 
+
+	$companies = Company::where('user_id', '=', $user->id)->get(); 
+
+	return View::make('userpages.companies', array('companies' => $companies)); 
+
+}); 
+
+
+Route::get('/home/company/new', function(){
+	
+	$user = Auth::user(); 
+
+	return View::make('userpages.new_company'); 
+
+}); 
+
+
+Route::post('/home/company/new', function(){
+	
+	$user = Auth::user(); 
+	$file = Input::file('file'); 
+	$filename = uniqid(); 
+	$name = Input::file('file')->getClientOriginalName();
+
+	$extention = explode(".", $name); 
+
+	$extention = array_pop($extention);  
+
+
+	$filename .= "." . $extention;
+
+	$file->move('public/img/upload', $filename); 
+	return Input::get('filename'); 
+}); 
+
+
 
 Route::get('/admin', array('before'=>'auth|admin', function(){
 

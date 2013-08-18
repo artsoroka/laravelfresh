@@ -44,7 +44,7 @@
 
             </ul>
             <div class="navbar-form pull-right">
-              <a href="logout" type="submit" class="btn btn-primary">Выйти</a>
+              <a href="/logout" type="submit" class="btn btn-primary">Выйти</a>
             </div>
           </div><!--/.nav-collapse -->
         </div>
