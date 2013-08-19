@@ -21,7 +21,9 @@ class CreateItemsTable extends Migration {
 			
 			$table->string('title');
 			$table->text('description'); 
-
+			$table->text('image'); 
+			$table->string('status'); 
+			
 			$table->integer('start_date');
 			$table->integer('end_date');
 

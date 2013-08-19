@@ -6,7 +6,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="brand" href="#">Fresh Ideas </a>
+          <a class="brand" href="/home">Fresh Ideas </a>
           <div class="nav-collapse collapse">
             <ul class="nav">
               
@@ -36,15 +36,29 @@
                   <li><a href="/home/company/new">Добавить компанию</a></li>
                   <li class="divider"></li>
                   <li class="nav-header">Сертификаты</li>
-                  <li><a href="/home/certificate">Текущие сертификаты</a></li>
-                  <li><a href="/home/certificate">Архив </a></li>
+                  <li><a href="/home/certificate">Мои сертификаты </a></li>
+                  <li><a href="/home/certificate/pending">Ожидают подтверждения </a></li>
                   <li><a href="/home/certificate/new">Новый сертификат </a></li>
                 </ul>
               </li>
 
             </ul>
             <div class="navbar-form pull-right">
+              
+              <div class="btn-group">
+                <button class="btn dropdown-toggle" data-toggle="dropdown"><i class="icon-user"></i> {{ Auth::user()->email }} <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                  <li><a href="#">Action</a></li>
+                  <li><a href="#">Another action</a></li>
+                  <li><a href="#">Something else here</a></li>
+                  <li class="divider"></li>
+                  <li><a href="/logout">Выйти</a></li>
+                </ul>
+              </div>
+
               <a href="/logout" type="submit" class="btn btn-primary">Выйти</a>
+
+
             </div>
           </div><!--/.nav-collapse -->
         </div>
