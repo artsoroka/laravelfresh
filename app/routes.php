@@ -149,11 +149,21 @@ Route::post('/login', function(){
 
 Route::group(array('before' => 'auth'), function(){
 
-
 	Route::get('/home', function(){
 		$user = Auth::user();
 		return View::make('userpages.index'); 
 	}); 
+
+
+
+/*
+|--------------------------------------------------------------------------
+| HOME Company 
+|--------------------------------------------------------------------------
+|
+| List, create, update and delete Companies 
+|
+*/
 
 	Route::get('/home/company', function(){
 		$user = Auth::user(); 
@@ -174,23 +184,6 @@ Route::group(array('before' => 'auth'), function(){
 
 
 	Route::post('/home/company/new', function(){
-		/*
-			
-		$user = Auth::user(); 
-		$file = Input::file('file'); 
-		$filename = uniqid(); 
-		$name = Input::file('file')->getClientOriginalName();
-
-		$extention = explode(".", $name); 
-
-		$extention = array_pop($extention);  
-
-
-		$filename .= "." . $extention;
-
-		$file->move('public/img/upload', $filename); 
-		return Input::get('filename'); 
-		*/
 		
 		$user = Auth::user(); 
 
@@ -237,13 +230,163 @@ Route::group(array('before' => 'auth'), function(){
 
 	});
 
+	Route::get('home/company/{company_id}/edit', function($company_id){
+		$user 		= Auth::user(); 
+		$company 	= Company::find($company_id); 
+
+		if( ! $company ) return "company not found"; 
+
+		if($company->belongs_to($user)){
+			return View::make('userpages.edit_company', array('company' => $company)); 
+		} else{
+			return "can't touch this"; 
+		}
+
+
+	});
+
+
+	Route::post('home/company/{company_id}/edit', function($company_id){
+		$user 		= Auth::user(); 
+		$company 	= Company::find($company_id); 
+
+		if( ! $company ) return "company not found"; 
+
+		if($company->belongs_to($user)){
+
+
+			$company_title 			= Input::get('company_title'); 	
+			$company_description	= Input::get('company_description'); 
+
+
+			$validation = Validator::make(
+		    	array('title' => $company_title),
+		    	array('title' => array('required'))
+			);
+
+			if($validation->fails()){
+				return $validation->errors();
+			} else {
+				
+				
+				$company->title 		= $company_title; 
+				$company->description 	= $company_description;
+				
+				$company->save(); 
+
+				return Redirect::to('/home/company/' . $company->id . '/edit'); 
+
+			}
+
+		} else{
+			return "can't touch this"; 
+		}
+
+	});
+
+
+/*
+|--------------------------------------------------------------------------
+| HOME Certificate 
+|--------------------------------------------------------------------------
+|
+| List, create, update and delete Companies 
+|
+*/
+
+Route::get('/home/certificate', function(){
+	$user = Auth::user(); 
+	$items = DB::select('SELECT * FROM items WHERE company_id in (SELECT id FROM companies WHERE user_id = ' . $user->id .' )'); 
+
+	return View::make('userpages.certificates', array('items' => $items)); 
+
+});
+
+
+Route::get('/home/certificate/pending', function(){
+	$user = Auth::user(); 
+	$all_items = DB::select('SELECT * FROM items WHERE company_id in (SELECT id FROM companies WHERE user_id = ' . $user->id .' )'); 
+	$items = array(); 
+	foreach ($all_items as $item) {
+		if($item->status == 'pending') array_push($items, $item); 
+	}
+
+	return View::make('userpages.certificates', array('items' => $items)); 
+
+});
+
+Route::get('/home/certificate/new', function(){
+	$user = Auth::user(); 
+	$companies = Company::where('user_id', '=', $user->id)->get(); 
+	
+	return View::make('userpages.new_certificate', array('companies' => $companies)); 
+
+
+});
+
+
+Route::post('/home/certificate/new', function(){
+	$user = Auth::user(); 
+	
+	$certificate_title 			= Input::get('certificate_title');
+	$certificate_description 	= Input::get('certificate_description');
+	$company_id 				= Input::get('company_id');
+	$file 						= Input::file('file');
+
+	$item = new Item; 
+
+	$item->title 		= $certificate_title; 
+	$item->description 	= $certificate_description; 
+	$item->company_id	= $company_id; 
+
+	$item->status 		= 'pending'; 
+
+	if($file){
+
+		$filename = uniqid(); 
+		$name = Input::file('file')->getClientOriginalName();
+
+		$extention = explode(".", $name); 
+
+		$extention = array_pop($extention);  
+
+
+		$filename .= "." . $extention;
+
+		$file->move('public/img/upload', $filename); 
+
+		$item->image 		= $filename; 
+
+	}
+
+	$item->save(); 
+
+	return Redirect::to('/home/certificate'); 
+
+});
+
+Route::get('/home/certificate/{item_id}/delete', function($item_id){
+	$user = Auth::user(); 
+	
+	$items = DB::select('SELECT i.*, u.id as user_id FROM items AS i JOIN  companies AS c ON (i.company_id = c.id) JOIN users AS u ON (c.user_id = u.id) WHERE i.id = ' . $item_id); 
+	
+	if( count($items) == 0) return 'item not found'; 
+
+	if( $user->id != $items[0]->user_id ) return "Can't touch this";  
+
+	$item = Item::find($item_id); 
+	$item->delete(); 
+
+	return Redirect::to('/home/certificate'); 
+
+});
+
 
 }); 
 
 
 
 Route::get('/admin', array('before'=>'auth|admin', function(){
-
-	return View::make('adminpages.index', array('items' => Item::all())); 
+	return View::make('adminpages.index', array('items' => Item::where('status', '=', 'pending')->get())); 
 
 })); 

@@ -36,8 +36,8 @@
                   <li><a href="/home/company/new">Добавить компанию</a></li>
                   <li class="divider"></li>
                   <li class="nav-header">Сертификаты</li>
-                  <li><a href="/home/certificate">Текущие сертификаты</a></li>
-                  <li><a href="/home/certificate">Архив </a></li>
+                  <li><a href="/home/certificate">Мои сертификаты </a></li>
+                  <li><a href="/home/certificate/pending">Ожидают подтверждения </a></li>
                   <li><a href="/home/certificate/new">Новый сертификат </a></li>
                 </ul>
               </li>
